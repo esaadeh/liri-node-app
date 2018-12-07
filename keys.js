@@ -1,4 +1,4 @@
-console.log('this is loaded');
+console.log('\nAPI KEYS LOADED\n');
 
 exports.spotify = {
   id: process.env.SPOTIFY_ID,
