@@ -1,4 +1,7 @@
+
 require("dotenv").config();
+
+var apiKeys = require("./keys.js");
 
 var Spotify = require('node-spotify-api');
 var axios = require('axios');
@@ -63,7 +66,45 @@ if (commandInput === 'do-what-it-says') {
         console.log(data);
         // Conver the string read from random.txt into an array
         var dataArray = data.split(',');
-//*******************Double quotes in some name */
+        //*******************Double quotes in some name */
         console.log(dataArray);
+    });
+}
+
+// Setting the spotify api keys
+var spotify = new Spotify(apiKeys.spotify);
+
+
+// node-spotiy-api request to if user command 'spotify-this-song' with queryInput
+if (commandInput === 'spotify-this-song' && queryInput) {
+    spotify.search({ type: 'track', query: queryInput, limit: 1 }, function (err, data) {
+        if (err) {
+            return console.log('Error occurred: ' + err);
+        }
+        // console.log(data);
+        var artist = data.tracks.items[0].artists[0].name;
+        var songName = data.tracks.items[0].name;
+        var albumName = data.tracks.items[0].album.name;
+        var previewLink = data.tracks.items[0].external_urls.spotify;
+        console.log('Artist: ' + artist);
+        console.log('Song: ' + songName);
+        console.log('Album: ' + albumName);
+        console.log('Preview Link: ' + previewLink);
+    });
+} else {
+    // node-spotiy-api request to if user command 'spotify-this-song' without queryInput
+    spotify.search({ type: 'track', query: 'The Sign', limit: 1 }, function (err, data) {
+        if (err) {
+            return console.log('Error occurred: ' + err);
+        }
+        // console.log(data);
+        var artist = data.tracks.items[0].artists[0].name;
+        var songName = data.tracks.items[0].name;
+        var albumName = data.tracks.items[0].album.name;
+        var previewLink = data.tracks.items[0].external_urls.spotify;
+        console.log('Artist: ' + artist);
+        console.log('Song: ' + songName);
+        console.log('Album: ' + albumName);
+        console.log('Preview Link: ' + previewLink);
     });
 }
