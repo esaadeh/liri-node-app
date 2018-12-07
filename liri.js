@@ -95,7 +95,30 @@ function doThis() {
         console.log(data);
         // Conver the string read from random.txt into an array
         var dataArray = data.split(',');
-        console.log(dataArray);
+        // console.log(dataArray);
+        commandInput = dataArray[0];
+        // Removing the quotations in dataArray[1] so the concert-this command works
+        queryInput = dataArray[1].slice(1, (dataArray[1].length -1));
+        console.log('***********' + dataArray[1].length);
+        // console.log(commandInput);
+        console.log(queryInput);
+
+        switch (commandInput) {
+            case 'movie-this':
+                movies();
+                break;
+        
+            case 'concert-this':
+                concert();
+                break;
+        
+            case 'spotify-this-song':
+                spotify();
+                break;
+        
+            default:
+                console.log('Formatting issues with the random.txt file!');
+        }
     });
 }
 
@@ -103,7 +126,7 @@ function doThis() {
 function spotify() {
     // Setting the spotify api keys
     var spotify = new Spotify(apiKeys.spotify);
-// Declaring variables required in the api request
+    // Declaring variables required in the api request
     var artist = '';
     var songName = '';
     var previewLink = '';
