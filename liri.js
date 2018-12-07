@@ -44,7 +44,7 @@ switch (commandInput) {
         break;
 
     case 'spotify-this-song':
-        spotify();
+        spotifyThis();
         break;
 
     default:
@@ -53,24 +53,32 @@ switch (commandInput) {
         console.log('\nTo search spotify for an song, enter "spotify-this followed by a space and the song name');
         console.log('\nTo do what is listed in the random.txt file, enter "do-what-it-says"\n');
 }
-
+// if (commandInput === 'spotify-this-song' && queryInput)
 // Function to run Axios request to OMDB API if user command 'movie-this'
 function movies() {
-    // Build OMDB query URL using user inputs
-    var omdbUrl = "http://www.omdbapi.com/?t=" + queryInput + "&y=&plot=short&apikey=trilogy";
 
-    axios.get(omdbUrl).then(function (omdbResponse) {
-        console.log('********* movie-this request results *********\n')
-        console.log('Movie Title Requested:  ' + omdbResponse.data.Title + '\n');
-        console.log('Release Date:  ' + omdbResponse.data.Released + '\n');
-        console.log('IMDB Rating:  ' + omdbResponse.data.Ratings[0].Value + '\n');
-        console.log('Rotton Tomatoes Rating:  ' + omdbResponse.data.Ratings[1].Value + '\n');
-        console.log('Production Country:  ' + omdbResponse.data.Country + '\n');
-        console.log('Language:  ' + omdbResponse.data.Language + '\n');
-        console.log('Plot:  ' + omdbResponse.data.Plot + '\n');
-        console.log('Actors:  ' + omdbResponse.data.Actors + '\n');
-    });
+    if (commandInput === 'movie-this' && queryInput) {
+        // Build OMDB query URL using user inputs
+        var omdbUrl = "http://www.omdbapi.com/?t=" + queryInput + "&y=&plot=short&apikey=trilogy";
+
+        axios.get(omdbUrl).then(function (omdbResponse) {
+            console.log('********* movie-this request results *********\n')
+            console.log('Movie Title Requested:  ' + omdbResponse.data.Title + '\n');
+            console.log('Release Date:  ' + omdbResponse.data.Released + '\n');
+            console.log('IMDB Rating:  ' + omdbResponse.data.Ratings[0].Value + '\n');
+            console.log('Rotton Tomatoes Rating:  ' + omdbResponse.data.Ratings[1].Value + '\n');
+            console.log('Production Country:  ' + omdbResponse.data.Country + '\n');
+            console.log('Language:  ' + omdbResponse.data.Language + '\n');
+            console.log('Plot:  ' + omdbResponse.data.Plot + '\n');
+            console.log('Actors:  ' + omdbResponse.data.Actors + '\n');
+        });
+    } else {
+        commandInput = 'movie-this';
+        queryInput = 'Mr. Nobody';
+        movies();
+    }
 }
+
 
 // Function to run Axios request to Bands in Town Artist Events API if user command 'concert-this'
 function concert() {
@@ -124,7 +132,7 @@ function doThis() {
 }
 
 // Function to run node-spotify-api request if user command 'spotify-this-song'
-function spotify() {
+function spotifyThis() {
     // Setting the spotify api keys
     var spotify = new Spotify(apiKeys.spotify);
 
@@ -142,16 +150,8 @@ function spotify() {
         });
     } else {
         // Run this if user doesn't supply queryInput
-        spotify.search({ type: 'track', query: 'The Sign', limit: 1 }, function (err, data) {
-            if (err) {
-                return console.log('Error occurred: ' + err);
-            }
-            console.log('********* spotify-this-song request results *********\n')
-            console.log('Artist:  ' + data.tracks.items[0].artists[0].name + '\n');
-            console.log('Song:  ' + data.tracks.items[0].name + '\n');
-            console.log('Preview Link:  ' + data.tracks.items[0].external_urls.spotify + '\n');
-            console.log('Album:  ' + data.tracks.items[0].album.name + '\n');
-        });
+        commandInput = 'spotify-this-song';
+        queryInput = 'The Sign';
+        spotifyThis();
     }
 }
-
