@@ -27,7 +27,7 @@ for (var i = 3; i < nodeArgs.length; i++) {
     }
 }
 
-// Set the commandInput through a swith statement to direct data flow
+// Set the commandInput through a swith statement to direct code flow
 
 switch (commandInput) {
     case 'movie-this':
@@ -47,27 +47,27 @@ switch (commandInput) {
         break;
 
     default:
-        console.log('To search for a movie, enter: "movie-this" followed by a space and the movie name');
-        console.log('To search for live events for an artist, enter: "concert-this" followed by a space and the artist name');
-        console.log('To search spotify for an song, enter "spotify-this followed by a space and the song name');
-        console.log('To do what is listed in the random.txt file, enter "do-what-it-says');
+        console.log('\n******** Instructions *********\nTo search for a movie, enter: "movie-this" followed by a space and the movie name.');
+        console.log('\nTo search for live events for an artist, enter: "concert-this" followed by a space and the artist name');
+        console.log('\nTo search spotify for an song, enter "spotify-this followed by a space and the song name');
+        console.log('\nTo do what is listed in the random.txt file, enter "do-what-it-says"\n');
 }
 
 // Function to run Axios request to OMDB API if user command 'movie-this'
 function movies() {
     // Build OMDB query URL using user inputs
     var omdbUrl = "http://www.omdbapi.com/?t=" + queryInput + "&y=&plot=short&apikey=trilogy";
-    console.log(omdbUrl);
 
     axios.get(omdbUrl).then(function (omdbResponse) {
-        console.log(omdbResponse.data.Title);
-        console.log(omdbResponse.data.Released);
-        console.log(omdbResponse.data.Ratings[0].Value);
-        console.log(omdbResponse.data.Ratings[1].Value);
-        console.log(omdbResponse.data.Country);
-        console.log(omdbResponse.data.Language);
-        console.log(omdbResponse.data.Plot);
-        console.log(omdbResponse.data.Actors);
+        console.log('********* movie-this request results *********\n')
+        console.log('Movie Title Requested:  ' + omdbResponse.data.Title + '\n');
+        console.log('Release Date:  ' + omdbResponse.data.Released + '\n');
+        console.log('IMDB Rating:  ' + omdbResponse.data.Ratings[0].Value + '\n');
+        console.log('Rotton Tomatoes Rating:  ' + omdbResponse.data.Ratings[1].Value + '\n');
+        console.log('Production Country:  ' + omdbResponse.data.Country + '\n');
+        console.log('Language:  ' + omdbResponse.data.Language + '\n');
+        console.log('Plot:  ' + omdbResponse.data.Plot + '\n');
+        console.log('Actors:  ' + omdbResponse.data.Actors + '\n');
     });
 }
 
@@ -75,14 +75,13 @@ function movies() {
 function concert() {
     // Build BIT query URL using user inputs
     var bitUrl = "https://rest.bandsintown.com/artists/" + queryInput + "/events?app_id=codingbootcamp";
-    console.log(bitUrl);
 
     axios.get(bitUrl).then(function (bitResponse) {
-        // console.log(bitResponse.data[1]);
-        console.log(bitResponse.data[0].venue.name);
-        console.log(bitResponse.data[0].venue.city);
-        console.log(bitResponse.data[0].venue.region);
-        console.log(bitResponse.data[0].datetime);
+        console.log('\n********* concert-this request results *********\n')
+        console.log('Artist:  ' + bitResponse.data[0].lineup[0] + '\n');
+        console.log('Venue:  ' + bitResponse.data[0].venue.name + '\n');
+        console.log('Location:  ' + bitResponse.data[0].venue.city + ', ' + bitResponse.data[0].venue.region + '\n');
+        console.log('Date:  ' + bitResponse.data[0].datetime + '\n');
     });
 }
 
@@ -92,30 +91,25 @@ function doThis() {
         if (error) {
             return console.log(error);
         }
-        console.log(data);
         // Conver the string read from random.txt into an array
         var dataArray = data.split(',');
-        // console.log(dataArray);
         commandInput = dataArray[0];
         // Removing the quotations in dataArray[1] so the concert-this command works
-        queryInput = dataArray[1].slice(1, (dataArray[1].length -1));
-        console.log('***********' + dataArray[1].length);
-        // console.log(commandInput);
-        console.log(queryInput);
+        queryInput = dataArray[1].slice(1, (dataArray[1].length - 1));
 
         switch (commandInput) {
             case 'movie-this':
                 movies();
                 break;
-        
+
             case 'concert-this':
                 concert();
                 break;
-        
+
             case 'spotify-this-song':
                 spotify();
                 break;
-        
+
             default:
                 console.log('Formatting issues with the random.txt file!');
         }
@@ -144,10 +138,11 @@ function spotify() {
             previewLink = data.tracks.items[0].external_urls.spotify;
             albumName = data.tracks.items[0].album.name;
 
-            console.log('Artist: ' + artist);
-            console.log('Song: ' + songName);
-            console.log('Preview Link: ' + previewLink);
-            console.log('Album: ' + albumName);
+            console.log('********* spotify-this-song request results *********\n')
+            console.log('Artist:  ' + artist + '\n');
+            console.log('Song:  ' + songName + '\n');
+            console.log('Preview Link:  ' + previewLink + '\n');
+            console.log('Album:  ' + albumName + '\n');
         });
     } else {
         // Run this if user doesn't supply queryInput
@@ -160,10 +155,11 @@ function spotify() {
             previewLink = data.tracks.items[0].external_urls.spotify;
             albumName = data.tracks.items[0].album.name;
 
-            console.log('Artist: ' + artist);
-            console.log('Song: ' + songName);
-            console.log('Preview Link: ' + previewLink);
-            console.log('Album: ' + albumName);
+            console.log('********* spotify-this-song request results *********\n')
+            console.log('Artist:  ' + artist + '\n');
+            console.log('Song:  ' + songName + '\n');
+            console.log('Preview Link:  ' + previewLink + '\n');
+            console.log('Album:  ' + albumName + '\n');
         });
     }
 }
