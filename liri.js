@@ -6,6 +6,7 @@ var apiKeys = require("./keys.js");
 var Spotify = require('node-spotify-api');
 var axios = require('axios');
 var moment = require('moment');
+moment().format();
 var fs = require('fs');
 
 
@@ -81,7 +82,13 @@ function concert() {
         console.log('Artist:  ' + bitResponse.data[0].lineup[0] + '\n');
         console.log('Venue:  ' + bitResponse.data[0].venue.name + '\n');
         console.log('Location:  ' + bitResponse.data[0].venue.city + ', ' + bitResponse.data[0].venue.region + '\n');
-        console.log('Date:  ' + bitResponse.data[0].datetime + '\n');
+
+        // Removing timestamp then moment date converstion
+        var date = bitResponse.data[0].datetime.slice(0, 10);
+        var dateMoment = moment(date, 'YYYY-MM-DD');
+        var venueDate = (dateMoment.format('MM/DD/YYYY'));
+
+        console.log('Date:  ' + venueDate + '\n');
     });
 }
 
@@ -120,11 +127,6 @@ function doThis() {
 function spotify() {
     // Setting the spotify api keys
     var spotify = new Spotify(apiKeys.spotify);
-    // Declaring variables required in the api request
-    var artist = '';
-    var songName = '';
-    var previewLink = '';
-    var albumName = '';
 
     // Run this if user supplies queryInput
     if (commandInput === 'spotify-this-song' && queryInput) {
@@ -132,17 +134,11 @@ function spotify() {
             if (err) {
                 return console.log('Error occurred: ' + err);
             }
-
-            artist = data.tracks.items[0].artists[0].name;
-            songName = data.tracks.items[0].name;
-            previewLink = data.tracks.items[0].external_urls.spotify;
-            albumName = data.tracks.items[0].album.name;
-
             console.log('********* spotify-this-song request results *********\n')
-            console.log('Artist:  ' + artist + '\n');
-            console.log('Song:  ' + songName + '\n');
-            console.log('Preview Link:  ' + previewLink + '\n');
-            console.log('Album:  ' + albumName + '\n');
+            console.log('Artist:  ' + data.tracks.items[0].artists[0].name + '\n');
+            console.log('Song:  ' + data.tracks.items[0].name + '\n');
+            console.log('Preview Link:  ' + data.tracks.items[0].external_urls.spotify + '\n');
+            console.log('Album:  ' + data.tracks.items[0].album.name + '\n');
         });
     } else {
         // Run this if user doesn't supply queryInput
@@ -150,16 +146,11 @@ function spotify() {
             if (err) {
                 return console.log('Error occurred: ' + err);
             }
-            artist = data.tracks.items[0].artists[0].name;
-            songName = data.tracks.items[0].name;
-            previewLink = data.tracks.items[0].external_urls.spotify;
-            albumName = data.tracks.items[0].album.name;
-
             console.log('********* spotify-this-song request results *********\n')
-            console.log('Artist:  ' + artist + '\n');
-            console.log('Song:  ' + songName + '\n');
-            console.log('Preview Link:  ' + previewLink + '\n');
-            console.log('Album:  ' + albumName + '\n');
+            console.log('Artist:  ' + data.tracks.items[0].artists[0].name + '\n');
+            console.log('Song:  ' + data.tracks.items[0].name + '\n');
+            console.log('Preview Link:  ' + data.tracks.items[0].external_urls.spotify + '\n');
+            console.log('Album:  ' + data.tracks.items[0].album.name + '\n');
         });
     }
 }
