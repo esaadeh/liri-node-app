@@ -122,7 +122,7 @@ function doThis() {
                 break;
 
             case 'spotify-this-song':
-                spotify();
+                spotifyThis();
                 break;
 
             default:
